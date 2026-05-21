@@ -1,1 +1,12 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-background: oklch(97.47% 0.0021 17.2);
+  --color-heading: oklch(21.78% 0 0);
+}
+
+body {
+  font-family:
+    -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+}
