@@ -1,9 +1,10 @@
 import { useGSAP } from '@gsap/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 export const Motion = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const boxRef = useRef<HTMLDivElement | null>(null);
 
   // assigned for getting instance gsap properties
   const animationRef = useRef<gsap.core.Tween | null>(null);
@@ -11,12 +12,17 @@ export const Motion = () => {
 
   useGSAP(
     () => {
+      if (!containerRef.current || !boxRef.current) return;
+
       animationRef.current = gsap.fromTo(
-        '.box',
-        { opacity: 1, rotation: 0, y: 0 },
+        boxRef.current,
+        { opacity: 1, rotation: 0, x: 0, y: 0 },
         {
           opacity: 1,
-          x: 300,
+          x: () => {
+            if (!containerRef.current || !boxRef.current) return 0;
+            return containerRef.current.offsetWidth - boxRef.current.offsetWidth;
+          },
           y: 0,
           rotation: 360,
           duration: 3,
@@ -28,6 +34,23 @@ export const Motion = () => {
     },
     { scope: containerRef }
   );
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // handle the responsive
+    const observer = new ResizeObserver(() => {
+      requestAnimationFrame(() => {
+        animationRef.current?.invalidate().restart();
+      });
+    });
+
+    observer.observe(containerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const handleToggleMotion = () => {
     if (!animationRef.current) return;
@@ -41,8 +64,9 @@ export const Motion = () => {
     }
   };
   return (
-    <div ref={containerRef} className="container">
+    <div ref={containerRef} className="container w-full">
       <div
+        ref={boxRef}
         onClick={handleToggleMotion}
         className="box flex h-20 w-20 cursor-pointer items-center justify-center bg-green-300 select-none"
       >

@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-background: oklch(97.47% 0.0021 17.2);
+  --color-background: oklch(95.42% 0.0211 60.7);
   --color-heading: oklch(21.78% 0 0);
+  --color-surface: oklch(97.13% 0.0062 75.4);
 }
 
 body {
@@ -12,6 +13,27 @@ body {
 }
 
 @layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #334155 #f1f5f9;
+  }
+
+  *::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-700;
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-slate-600;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-800;
+  }
   button,
   a {
     @apply cursor-pointer select-none;
